@@ -1,0 +1,12 @@
+version: "3"
+services:
+    vk-users:
+        image: postgres
+        restart: always
+        container_name: vk-users
+        environment:
+            POSTGRES_USER: "vk-users"
+            POSTGRES_DB: "vk-users"
+            POSTGRES_PASSWORD: "123456"
+        ports:
+            - "15433:5432"
