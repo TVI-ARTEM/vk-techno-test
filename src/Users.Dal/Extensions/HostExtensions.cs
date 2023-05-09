@@ -1,8 +1,6 @@
 using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Npgsql;
-using Npgsql.NameTranslation;
 
 namespace Users.Dal.Extensions;
 

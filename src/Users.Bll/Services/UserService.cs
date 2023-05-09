@@ -5,7 +5,7 @@ using Users.Bll.Services.Interfaces;
 
 namespace Users.Bll.Services;
 
-internal class UserService : IUserService
+public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
 
@@ -39,7 +39,7 @@ internal class UserService : IUserService
         return await _userRepository.Query(token);
     }
 
-    public async Task Add(AddUserRequest userRequest, CancellationToken token)
+    public async Task AddUser(AddUserRequest userRequest, CancellationToken token)
     {
         await _userRepository.Add(userRequest, token);
     }

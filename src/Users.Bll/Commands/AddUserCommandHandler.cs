@@ -8,6 +8,7 @@ namespace Users.Bll.Commands;
 public record AddUserCommand(
     string Login,
     string Password,
+    DateTime CreateDate,
     string GroupCode,
     string GroupDescription,
     string StateDescription
@@ -46,13 +47,13 @@ public class AddUserCommandHandler : IRequestHandler<AddUserCommand, Unit>
         (
             request.Login,
             request.Password,
-            DateTime.Now,
+            request.CreateDate,
             groupCode,
             request.GroupDescription,
             request.StateDescription
         );
 
-        await _service.Add(addRequest, cancellationToken);
+        await _service.AddUser(addRequest, cancellationToken);
 
         return new Unit();
     }

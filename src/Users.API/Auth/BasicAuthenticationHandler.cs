@@ -21,33 +21,30 @@ public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSc
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         if (!Request.Headers.ContainsKey("Authorization"))
-            return AuthenticateResult.Fail("Missing Authorization header");
+            return AuthenticateResult.Fail("Authorization header is missed");
 
         var authorizationHeader = Request.Headers["Authorization"].ToString();
 
         if (!authorizationHeader.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
-            return AuthenticateResult.Fail("Authorization header does not start with 'Basic'");
+            return AuthenticateResult.Fail("Incorrect Authorization header. Must be start from 'Basic'");
 
-        var authBase64Decoded =
-            Encoding.UTF8.GetString(
-                Convert.FromBase64String(authorizationHeader.Replace("Basic ", "",
-                    StringComparison.OrdinalIgnoreCase)));
-        var authSplit = authBase64Decoded.Split(new[] { ':' }, 2);
+        var token = authorizationHeader.Replace("Basic", "", StringComparison.OrdinalIgnoreCase).Trim();
 
-        if (authSplit.Length != 2) return AuthenticateResult.Fail("Invalid Authorization header format");
+        var authBase64Decoded = Encoding.UTF8.GetString(Convert.FromBase64String(token));
+        var tokens = authBase64Decoded.Split(':');
 
-        var clientLogin = authSplit[0];
-        var clientPassword = authSplit[1];
+        if (tokens.Length != 2) return AuthenticateResult.Fail("Invalid Authorization header token format");
 
-        if (!await _mediator.Send(new AuthUserCommand(clientLogin, clientPassword)))
-            return AuthenticateResult.Fail($"The password is incorrect for the client '{clientLogin}'");
+        var userLogin = tokens[0];
+        var userPassword = tokens[1];
 
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.Name, clientLogin)
-        };
+        if (!await _mediator.Send(new AuthUserCommand(userLogin, userPassword)))
+            return AuthenticateResult.Fail($"'{userLogin}' - incorrect password");
+
+        var claims = new[] { new Claim(ClaimTypes.Name, userLogin) };
         var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);
+
         return AuthenticateResult.Success(new AuthenticationTicket(principal, Scheme.Name));
     }
 }

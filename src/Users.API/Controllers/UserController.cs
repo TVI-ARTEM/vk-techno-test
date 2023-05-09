@@ -137,6 +137,7 @@ public class UserController : ControllerBase
         await _mediator.Send(new AddUserCommand(
             request.Login,
             request.Password,
+            DateTime.Now,
             request.GroupCode,
             request.GroupDescription,
             request.StateDescription
