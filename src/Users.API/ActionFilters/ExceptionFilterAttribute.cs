@@ -30,7 +30,7 @@ public sealed class ExceptionFilterAttribute : Attribute, IExceptionFilter
     {
         var jsonResult = new JsonResult(new ErrorResponse(
             HttpStatusCode.InternalServerError,
-            "Возникла ошибка, уже чиним"))
+            "Server Error!"))
         {
             StatusCode = (int)HttpStatusCode.InternalServerError
         };

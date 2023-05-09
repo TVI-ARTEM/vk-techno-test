@@ -1,4 +1,4 @@
-﻿namespace Users.API.Request;
+﻿namespace Users.API.Requests;
 
 public record GetUsersQueryRequest(
     int Take,

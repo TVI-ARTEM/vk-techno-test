@@ -1,3 +1,3 @@
-﻿namespace Users.API.Response;
+﻿namespace Users.API.Responses;
 
 public record GetUsersResponse(List<UserInfo> UsersInfo);

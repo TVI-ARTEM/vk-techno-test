@@ -19,7 +19,7 @@ public class GetUsersQueryCommandHandler : IRequestHandler<GetUsersQueryCommand,
     public async Task<IEnumerable<User>> Handle(GetUsersQueryCommand request, CancellationToken cancellationToken)
     {
         return await _service.QueryUsers(
-            new QueryUserRequest(Take: request.Take, Skip: request.Skip),
+            new QueryUserRequest(request.Take, request.Skip),
             cancellationToken);
     }
 }

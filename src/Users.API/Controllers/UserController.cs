@@ -1,14 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Users.API.Request;
-using Users.API.Response;
+using Users.API.Auth;
+using Users.API.Requests;
+using Users.API.Responses;
 using Users.Bll.Commands;
 
 namespace Users.API.Controllers;
 
 [ApiController]
-[Route("/[controller]")]
-public class UserController
+[Route("/[controller]/[action]")]
+public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -17,130 +18,148 @@ public class UserController
         _mediator = mediator;
     }
 
-    [HttpGet("[action]")]
-    public async Task<GetUserResponse> GetById([FromQuery] GetUserIdRequest idRequest, CancellationToken token)
+    [HttpGet]
+    [BasicAuthorization]
+    public async Task<GetUserResponse> GetById([FromQuery] UserIdRequest idRequest, CancellationToken token)
     {
-        var user = await _mediator.Send(new GetUserIdCommand(UserId: idRequest.Id), token);
+        var user = await _mediator.Send(new GetUserIdCommand(idRequest.Id), token);
 
         return new GetUserResponse(new UserInfo
         (
-            Id: user.Id,
-            Login: user.Login,
-            CreatedDate: user.CreatedDate,
-            UserGroupInfo: new UserGroupInfo
+            user.Id,
+            user.Login,
+            user.CreatedDate,
+            new UserGroupInfo
             (
-                Id: user.UserGroup.Id,
-                Code: user.UserGroup.Code.ToString(),
-                Description: user.UserGroup.Description
+                user.UserGroup.Id,
+                user.UserGroup.Code.ToString(),
+                user.UserGroup.Description
             ),
-            UserStateInfo: new UserStateInfo
+            new UserStateInfo
             (
-                Id: user.UserState.Id,
-                Code: user.UserState.Code.ToString(),
-                Description: user.UserState.Description
+                user.UserState.Id,
+                user.UserState.Code.ToString(),
+                user.UserState.Description
             )
         ));
     }
 
 
-    [HttpGet("[action]")]
-    public async Task<GetUserResponse> GetByLogin([FromQuery] GetUserLoginRequest idRequest, CancellationToken token)
+    [HttpGet]
+    [BasicAuthorization]
+    public async Task<GetUserResponse> GetByLogin([FromQuery] UserLoginRequest idRequest, CancellationToken token)
     {
-        var user = await _mediator.Send(new GetUserLoginCommand(Login: idRequest.Login), token);
+        var user = await _mediator.Send(new GetUserLoginCommand(idRequest.Login), token);
 
         return new GetUserResponse(new UserInfo
         (
-            Id: user.Id,
-            Login: user.Login,
-            CreatedDate: user.CreatedDate,
-            UserGroupInfo: new UserGroupInfo
+            user.Id,
+            user.Login,
+            user.CreatedDate,
+            new UserGroupInfo
             (
-                Id: user.UserGroup.Id,
-                Code: user.UserGroup.Code.ToString(),
-                Description: user.UserGroup.Description
+                user.UserGroup.Id,
+                user.UserGroup.Code.ToString(),
+                user.UserGroup.Description
             ),
-            UserStateInfo: new UserStateInfo
+            new UserStateInfo
             (
-                Id: user.UserState.Id,
-                Code: user.UserState.Code.ToString(),
-                Description: user.UserState.Description
+                user.UserState.Id,
+                user.UserState.Code.ToString(),
+                user.UserState.Description
             )
         ));
     }
 
-    [HttpGet("[action]")]
+    [HttpGet]
+    [BasicAuthorization]
     public async Task<GetUsersResponse> GetAll(CancellationToken token)
     {
         var usersInfo = new List<UserInfo>();
         var users = await _mediator.Send(new GetUsersAllCommand(), token);
         foreach (var user in users)
-        {
             usersInfo.Add(new UserInfo
                 (
-                    Id: user.Id,
-                    Login: user.Login,
-                    CreatedDate: user.CreatedDate,
-                    UserGroupInfo: new UserGroupInfo
+                    user.Id,
+                    user.Login,
+                    user.CreatedDate,
+                    new UserGroupInfo
                     (
-                        Id: user.UserGroup.Id,
-                        Code: user.UserGroup.Code.ToString(),
-                        Description: user.UserGroup.Description
+                        user.UserGroup.Id,
+                        user.UserGroup.Code.ToString(),
+                        user.UserGroup.Description
                     ),
-                    UserStateInfo: new UserStateInfo
+                    new UserStateInfo
                     (
-                        Id: user.UserState.Id,
-                        Code: user.UserState.Code.ToString(),
-                        Description: user.UserState.Description
+                        user.UserState.Id,
+                        user.UserState.Code.ToString(),
+                        user.UserState.Description
                     )
                 )
             );
-        }
 
         return new GetUsersResponse(usersInfo);
     }
 
-    [HttpGet("[action]")]
+    [HttpGet]
+    [BasicAuthorization]
     public async Task<GetUsersResponse> GetQuery([FromQuery] GetUsersQueryRequest request, CancellationToken token)
     {
         var usersInfo = new List<UserInfo>();
         var users = await _mediator.Send(new GetUsersQueryCommand(request.Take, request.Skip), token);
         foreach (var user in users)
-        {
             usersInfo.Add(new UserInfo
                 (
-                    Id: user.Id,
-                    Login: user.Login,
-                    CreatedDate: user.CreatedDate,
-                    UserGroupInfo: new UserGroupInfo
+                    user.Id,
+                    user.Login,
+                    user.CreatedDate,
+                    new UserGroupInfo
                     (
-                        Id: user.UserGroup.Id,
-                        Code: user.UserGroup.Code.ToString(),
-                        Description: user.UserGroup.Description
+                        user.UserGroup.Id,
+                        user.UserGroup.Code.ToString(),
+                        user.UserGroup.Description
                     ),
-                    UserStateInfo: new UserStateInfo
+                    new UserStateInfo
                     (
-                        Id: user.UserState.Id,
-                        Code: user.UserState.Code.ToString(),
-                        Description: user.UserState.Description
+                        user.UserState.Id,
+                        user.UserState.Code.ToString(),
+                        user.UserState.Description
                     )
                 )
             );
-        }
 
         return new GetUsersResponse(usersInfo);
     }
 
-    [HttpPost("[action]")]
-    public async Task<AddUserResponse> AddUser([FromBody] AddUserRequest request, CancellationToken token)
+    [HttpPost]
+    public async Task<AddUserResponse> Add([FromBody] AddUserRequest request, CancellationToken token)
     {
         await _mediator.Send(new AddUserCommand(
-            Login: request.Login,
-            Password: request.Password,
-            GroupCode: request.GroupCode,
-            GroupDescription: request.GroupDescription,
-            StateDescription: request.StateDescription
+            request.Login,
+            request.Password,
+            request.GroupCode,
+            request.GroupDescription,
+            request.StateDescription
         ), token);
 
         return new AddUserResponse();
+    }
+
+    [HttpDelete]
+    [BasicAuthorization]
+    public async Task<RemoveUserResponse> RemoveById([FromBody] UserIdRequest request, CancellationToken token)
+    {
+        await _mediator.Send(new RemoveUserIdCommand(request.Id), token);
+
+        return new RemoveUserResponse();
+    }
+
+    [HttpDelete]
+    [BasicAuthorization]
+    public async Task<RemoveUserResponse> RemoveByLogin([FromBody] UserLoginRequest request, CancellationToken token)
+    {
+        await _mediator.Send(new RemoveUserLoginCommand(request.Login), token);
+
+        return new RemoveUserResponse();
     }
 }

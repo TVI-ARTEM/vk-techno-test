@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MediatR;
+﻿using MediatR;
 using Users.Bll.Models;
 using Users.Bll.Queries;
 using Users.Bll.Services.Interfaces;
@@ -36,25 +35,21 @@ public class AddUserCommandHandler : IRequestHandler<AddUserCommand, Unit>
         {
             var users = await _service.QueryUsers(groupCode, cancellationToken);
             if (users.Any(it => it.UserState.Code == UserStateEnum.Active))
-            {
                 throw new ArgumentException("Admin user already exists", nameof(AddUserCommand.GroupCode));
-            }
         }
 
         var userSameLogin = await _service.QueryUser(request.Login, cancellationToken);
         if (userSameLogin != null)
-        {
             throw new ArgumentException("User with current login already exists", nameof(AddUserCommand.Login));
-        }
 
         var addRequest = new AddUserRequest
         (
-            Login: request.Login,
-            Password: request.Password,
-            CreatedDate: DateTime.Now,
-            GroupCode: groupCode,
-            GroupDescription: request.GroupDescription,
-            StateDescription: request.StateDescription
+            request.Login,
+            request.Password,
+            DateTime.Now,
+            groupCode,
+            request.GroupDescription,
+            request.StateDescription
         );
 
         await _service.Add(addRequest, cancellationToken);

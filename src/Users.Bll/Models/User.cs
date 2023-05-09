@@ -17,6 +17,6 @@ public record User
 
     [Column("user_state_id")] public long UserStateId { get; set; }
 
-    /*[ForeignKey("user_group_id")]*/ public virtual UserGroup UserGroup { get; set; } = null!;
-    /*[ForeignKey("user_state_id")]*/ public virtual UserState UserState { get; set; } = null!;
+    public virtual UserGroup UserGroup { get; set; } = null!;
+    public virtual UserState UserState { get; set; } = null!;
 }

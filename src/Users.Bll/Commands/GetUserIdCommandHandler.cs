@@ -18,10 +18,7 @@ public class GetUserIdCommandHandler : IRequestHandler<GetUserIdCommand, User>
     public async Task<User> Handle(GetUserIdCommand request, CancellationToken cancellationToken)
     {
         var user = await _service.QueryUser(request.UserId, cancellationToken);
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user), "User with current id does not exist");
-        }
+        if (user == null) throw new ArgumentNullException(nameof(user), "User with current id does not exist");
 
         return user;
     }

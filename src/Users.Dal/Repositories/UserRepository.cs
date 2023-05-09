@@ -28,17 +28,17 @@ internal class UserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> Query(UserGroupEnum userGroup, CancellationToken token)
     {
-        return await _context.Users.Where(it => it.UserGroup.Code == userGroup).ToListAsync(cancellationToken: token);
+        return await _context.Users.Where(it => it.UserGroup.Code == userGroup).ToListAsync(token);
     }
 
     public async Task<IEnumerable<User>> Query(QueryUserRequest request, CancellationToken token)
     {
-        return await _context.Users.Skip(request.Skip).Take(request.Take).ToListAsync(cancellationToken: token);
+        return await _context.Users.Skip(request.Skip).Take(request.Take).ToListAsync(token);
     }
 
     public async Task<IEnumerable<User>> Query(CancellationToken token)
     {
-        return await _context.Users.ToListAsync(cancellationToken: token);
+        return await _context.Users.ToListAsync(token);
     }
 
     public async Task Add(AddUserRequest userRequest, CancellationToken token)
@@ -70,13 +70,26 @@ internal class UserRepository : IUserRepository
         await _context.SaveChangesAsync(token);
     }
 
-    public Task Remove(long id, CancellationToken token)
+    public async Task Remove(long id, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var userState = await _context.UserStates.FirstOrDefaultAsync(it => it.User.Id == id, token);
+        if (userState != null)
+        {
+            userState.Code = UserStateEnum.Blocked;
+            await _context.SaveChangesAsync(token);
+        }
     }
 
-    public Task Remove(string login, CancellationToken token)
+    public async Task Remove(string login, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var userState = await _context.UserStates.FirstOrDefaultAsync(
+            it => it.User.Login.ToLower() == login.ToLower(), token
+        );
+
+        if (userState != null)
+        {
+            userState.Code = UserStateEnum.Blocked;
+            await _context.SaveChangesAsync(token);
+        }
     }
 }

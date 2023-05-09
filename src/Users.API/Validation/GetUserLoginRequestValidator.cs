@@ -1,9 +1,9 @@
 using FluentValidation;
-using Users.API.Request;
+using Users.API.Requests;
 
 namespace Users.API.Validation;
 
-public class GetUserLoginRequestValidator : AbstractValidator<GetUserLoginRequest>
+public class GetUserLoginRequestValidator : AbstractValidator<UserLoginRequest>
 {
     public GetUserLoginRequestValidator()
     {
