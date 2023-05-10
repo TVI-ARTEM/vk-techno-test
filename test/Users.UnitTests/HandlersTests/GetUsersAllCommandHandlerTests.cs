@@ -15,7 +15,7 @@ public class GetUsersAllCommandHandlerTests
 
         var builder = new GetUsersAllCommandHandlerBuilder();
 
-        builder.UserService.SetupQueryUserLogin(new User());
+        builder.UserService.SetupQueryUserAll(new[] { new User() });
 
         var handler = builder.Build();
 

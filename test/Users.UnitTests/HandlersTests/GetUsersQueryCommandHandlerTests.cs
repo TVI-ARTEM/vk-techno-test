@@ -17,7 +17,7 @@ public class GetUsersQueryCommandHandlerTests
 
         var builder = new GetUsersQueryCommandHandlerBuilder();
 
-        builder.UserService.SetupQueryUserLogin(new User());
+        builder.UserService.SetupQueryUserRequest(new[] { new User() });
 
         var handler = builder.Build();
 
