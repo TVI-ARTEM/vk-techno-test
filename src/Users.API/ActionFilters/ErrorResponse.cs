@@ -4,12 +4,12 @@ namespace Users.API.ActionFilters;
 
 public class ErrorResponse
 {
-    public ErrorResponse(HttpStatusCode statusCode, string message)
+    public ErrorResponse(int statusCode, string message)
     {
         StatusCode = statusCode;
         Message = message;
     }
 
-    public HttpStatusCode StatusCode { get; }
+    public int StatusCode { get; }
     public string Message { get; }
 }

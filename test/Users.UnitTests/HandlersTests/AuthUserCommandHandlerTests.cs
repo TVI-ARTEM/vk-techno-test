@@ -25,6 +25,6 @@ public class AuthUserCommandHandlerTests
         await handler.Handle(command, default);
 
         handler.UserService.VerifyQueryUserLoginWasCalledOnce(command.Login);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 }

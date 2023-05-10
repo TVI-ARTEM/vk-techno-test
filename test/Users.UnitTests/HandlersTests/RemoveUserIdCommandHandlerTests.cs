@@ -21,6 +21,6 @@ public class RemoveUserIdCommandHandlerTests
         await handler.Handle(command, default);
 
         handler.UserService.VerifyRemoveUserWasCalledOnce(command.UserId);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 }

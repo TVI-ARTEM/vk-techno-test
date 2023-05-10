@@ -21,6 +21,6 @@ public class RemoveUserLoginCommandHandlerTests
         await handler.Handle(command, default);
 
         handler.UserService.VerifyRemoveUserWasCalledOnce(command.Login);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 }

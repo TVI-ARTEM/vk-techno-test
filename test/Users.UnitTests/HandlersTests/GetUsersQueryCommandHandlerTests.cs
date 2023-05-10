@@ -24,6 +24,6 @@ public class GetUsersQueryCommandHandlerTests
         await handler.Handle(command, default);
 
         handler.UserService.VerifyQueryUserRequestWasCalledOnce(request);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 }

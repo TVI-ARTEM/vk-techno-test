@@ -42,7 +42,7 @@ public class AddUserCommandHandlerTests
         handler.UserService.VerifyQueryGroupEnumWasCalledOnce(UserGroupEnum.Admin);
         handler.UserService.VerifyQueryUserLoginWasCalledOnce(command.Login);
         handler.UserService.VerifyAddUserWasCalledOnce(request);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class AddUserCommandHandlerTests
 
         await Assert.ThrowsAsync<ArgumentException>(async () => await handler.Handle(command, default));
 
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class AddUserCommandHandlerTests
         await Assert.ThrowsAsync<ArgumentException>(async () => await handler.Handle(command, default));
 
         handler.UserService.VerifyQueryGroupEnumWasCalledOnce(UserGroupEnum.Admin);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -119,6 +119,6 @@ public class AddUserCommandHandlerTests
 
         handler.UserService.VerifyQueryGroupEnumWasCalledOnce(UserGroupEnum.Admin);
         handler.UserService.VerifyQueryUserLoginWasCalledOnce(command.Login);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 }

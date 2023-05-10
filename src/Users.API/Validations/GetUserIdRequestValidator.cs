@@ -1,7 +1,7 @@
 using FluentValidation;
 using Users.API.Requests;
 
-namespace Users.API.Validation;
+namespace Users.API.Validations;
 
 public class GetUserIdRequestValidator : AbstractValidator<UserIdRequest>
 {

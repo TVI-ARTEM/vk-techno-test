@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Users.Bll.Models;
 using Users.Bll.Services.Interfaces;
 
 namespace Users.Bll.Commands;
@@ -21,6 +22,7 @@ public class AuthUserCommandHandler : IRequestHandler<AuthUserCommand, bool>
     {
         var user = await _service.QueryUser(request.Login, cancellationToken);
 
-        return user != null && user.Password.ToLower() == request.Password;
+        return user is { UserState.Code: UserStateEnum.Active } &&
+               user.Password.ToLower() == request.Password;
     }
 }

@@ -24,7 +24,7 @@ public class GetUserIdCommandHandlerTests
         await handler.Handle(command, default);
 
         handler.UserService.VerifyQueryUserIdWasCalledOnce(command.UserId);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -44,6 +44,6 @@ public class GetUserIdCommandHandlerTests
         await Assert.ThrowsAsync<ArgumentNullException>(async () => await handler.Handle(command, default));
 
         handler.UserService.VerifyQueryUserIdWasCalledOnce(command.UserId);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 }

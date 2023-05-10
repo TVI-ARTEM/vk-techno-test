@@ -24,7 +24,7 @@ public class GetUserLoginCommandHandlerTests
         await handler.Handle(command, default);
 
         handler.UserService.VerifyQueryUserLoginWasCalledOnce(command.Login);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -43,6 +43,6 @@ public class GetUserLoginCommandHandlerTests
         await Assert.ThrowsAsync<ArgumentNullException>(async () => await handler.Handle(command, default));
 
         handler.UserService.VerifyQueryUserLoginWasCalledOnce(command.Login);
-        handler.UserService.VerifyNoOtherCalls();
+        handler.VerifyNoOtherCalls();
     }
 }
