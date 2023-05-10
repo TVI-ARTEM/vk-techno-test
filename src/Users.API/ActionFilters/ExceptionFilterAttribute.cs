@@ -29,7 +29,7 @@ public sealed class ExceptionFilterAttribute : Attribute, IExceptionFilter
     private static void HandlerInternalError(ExceptionContext context)
     {
         var jsonResult = new JsonResult(new ErrorResponse(
-            HttpStatusCode.InternalServerError,
+            (int)HttpStatusCode.InternalServerError,
             "Server Error!"))
         {
             StatusCode = (int)HttpStatusCode.InternalServerError
@@ -41,7 +41,7 @@ public sealed class ExceptionFilterAttribute : Attribute, IExceptionFilter
     {
         var jsonResult = new JsonResult(
             new ErrorResponse(
-                HttpStatusCode.BadRequest,
+                (int)HttpStatusCode.BadRequest,
                 exception.Message))
         {
             StatusCode = (int)HttpStatusCode.BadRequest
@@ -54,7 +54,7 @@ public sealed class ExceptionFilterAttribute : Attribute, IExceptionFilter
     {
         var jsonResult = new JsonResult(
             new ErrorResponse(
-                HttpStatusCode.NotFound,
+                (int)HttpStatusCode.NotFound,
                 exception.Message))
         {
             StatusCode = (int)HttpStatusCode.NotFound
